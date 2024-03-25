@@ -924,8 +924,7 @@ dependencies = [
 [[package]]
 name = "r2d2_sqlite"
 version = "0.23.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4dc290b669d30e20751e813517bbe13662d020419c5c8818ff10b6e8bb7777f6"
+source = "git+https://github.com/ivanceras/r2d2-sqlite?branch=master#f4ab22bcf6d67fb4d13d575341b8c39ff13eed9f"
 dependencies = [
  "r2d2",
  "rusqlite",

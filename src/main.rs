@@ -1,11 +1,13 @@
 use actix_web::{middleware::Logger, web, App, HttpServer};
-use linking::services::{create, show, scaffold_database};
+use linking::services::{create, scaffold_database, show};
+use log::info;
 use r2d2_sqlite::SqliteConnectionManager;
-
-extern crate rusqlite;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let hostname = "127.0.0.1";
+    let port = 8080;
+
     // Set up some default logger for the application. I just copy/pasted this from somewhere.
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("info"));
 
@@ -23,6 +25,11 @@ async fn main() -> std::io::Result<()> {
     // I figured this was better than having some scaffolding scripts.
     scaffold_database(pool.clone());
 
+    info!("Starting server at http://{hostname}:{port:?}");
+
+    // Move any variables referenced in the closure (`{ ... }`) into the closure.
+    //
+    // https://doc.rust-lang.org/std/keyword.move.html
     HttpServer::new(move || {
         App::new()
             .wrap(Logger::default())

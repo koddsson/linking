@@ -8,6 +8,7 @@ mod tests {
     fn before_each() -> Pool<SqliteConnectionManager> {
         let manager = SqliteConnectionManager::memory();
         let pool = r2d2::Pool::builder()
+            .max_size(1)
             .build(manager)
             .expect("Couldn't open up a sqlite db in memory");
 
@@ -80,5 +81,16 @@ mod tests {
             "Expected {} to be a successful response code",
             resp.status()
         );
+
+        let req = test::TestRequest::get()
+            .insert_header(ContentType::plaintext())
+            .uri("/foo")
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        assert!(
+            resp.status().is_success(), 
+            "Expected {} to be a successful response code",
+            resp.status()
+        );
     }
-}
+    }
